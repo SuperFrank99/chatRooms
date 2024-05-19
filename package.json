@@ -4,7 +4,7 @@
   "scripts": {
     "install-client": "cd client && yarn install",
     "install-server": "cd server && yarn install",
-    "build-client": "cd client && yarn build",
+    "build-client": "cd client && NODE_OPTIONS=--openssl-legacy-provider yarn build",
     "start-client": "cd client && NODE_OPTIONS=--openssl-legacy-provider yarn start",
     "start-server": "cd server && node index.js",
     "start": "run-p start-client start-server",
