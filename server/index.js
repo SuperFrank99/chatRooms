@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 const http = require("http");
+const path = require("path");
+const fs = require("fs");
 const cors = require("cors");
 const { Server } = require("socket.io");
 app.use(cors());
@@ -32,6 +34,20 @@ io.on("connection", (socket) => {
 });
 
 const PORT = process.env.PORT || 3001;
+
+// If a client build exists, serve it (SPA fallback to index.html)
+const clientBuildPath = path.join(__dirname, "..", "client", "build");
+if (fs.existsSync(path.join(clientBuildPath, "index.html"))) {
+  app.use(express.static(clientBuildPath));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(clientBuildPath, "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("Server running");
+  });
+}
 
 server.listen(PORT, () => {
   console.log(`SERVER RUNNING ON PORT ${PORT}`);
